@@ -5,10 +5,18 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from freeGPTFix import Client
 import hashlib
+
 app = FastAPI()
 
 
 class Chat(BaseModel):
+    text: str
+    # multi_language: bool | None = False
+
+
+class ChatTwo(BaseModel):
+    previous_question: str
+    previous_answer: str
     text: str
     # multi_language: bool | None = False
 
@@ -21,9 +29,9 @@ def generate_analysis_response(request_text: str) -> str:
         return "An error occurred while processing your request."
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+# @app.get("/")
+# async def root():
+#     return {"message": "Hello World"}
 
 
 @app.post("/items/")
@@ -51,6 +59,7 @@ async def create_item(chat: Chat):
     response_data = generate_analysis_response(multi_text)
     return response_data
 
+
 @app.post("/generate_image")
 async def generate_image(chat: Chat):
     resp = Client.create_generation("prodia", chat.text)
@@ -60,3 +69,11 @@ async def generate_image(chat: Chat):
     with open(path, "wb") as f:
         f.write(resp)
     return path
+
+@app.post("/perfect_answer/")
+async def perfect_answer(chat: ChatTwo):
+    text = f'''Тебе ранее заданный вопрос: {chat.previous_question}\n
+И твой ответ на этот вопрос: {chat.previous_answer}\n
+Используя предыдущий ответ, ответь на этот вопрос: {chat.text}'''
+    return generate_analysis_response(text)
+
