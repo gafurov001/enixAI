@@ -10,7 +10,7 @@ app = FastAPI()
 
 
 class Chat(BaseModel):
-    text: str
+    message: str
     # multi_language: bool | None = False
 
 
@@ -53,7 +53,7 @@ async def create_item(chat: Chat):
         "- Вы не должны повторять формулировку запроса пользователя.\n"
         "- В конце каждого ответа вы обязаны добавлять водяной знак: пробел и Enix.\n"
         "\n"
-        f"[Текст]: {chat.text}\n"
+        f"[Текст]: {chat.message}\n"
     )
 
     response_data = generate_analysis_response(multi_text)
@@ -62,7 +62,7 @@ async def create_item(chat: Chat):
 
 @app.post("/generate_image")
 async def generate_image(chat: Chat):
-    text = Client.create_completion("gpt4", f"Agar matin rus yoki uzbek tilida bo'lsa aniq va tiniq ingiliz tiliga tarjima qil, agar ingiliz tilida bo'lsa ozgarishsiz matini qaytar! mati: {chat.text}")
+    text = Client.create_completion("gpt4", f"Agar matin rus yoki uzbek tilida bo'lsa aniq va tiniq ingiliz tiliga tarjima qil, agar ingiliz tilida bo'lsa ozgarishsiz matini qaytar! mati: {chat.message}")
     resp = Client.create_generation("prodia", text)
     now = datetime.now()
     pwd = subprocess.check_output(["pwd"], text=True).strip()
