@@ -62,7 +62,7 @@ async def create_item(chat: Chat):
 
 @app.post("/generate_image")
 async def generate_image(chat: Chat):
-    text = Client.create_completion("gpt4", "Agar matin rus yoki uzbek tilida bo'lsa aniq va tiniq ingiliz tiliga tarjima qil, agar ingiliz tilida bo'lsa ozgarishsiz matini qaytar!")
+    text = Client.create_completion("gpt4", f"Agar matin rus yoki uzbek tilida bo'lsa aniq va tiniq ingiliz tiliga tarjima qil, agar ingiliz tilida bo'lsa ozgarishsiz matini qaytar! mati: {chat.text}")
     resp = Client.create_generation("prodia", text)
     now = datetime.now()
     pwd = subprocess.check_output(["pwd"], text=True).strip()
