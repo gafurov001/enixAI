@@ -65,8 +65,8 @@ async def generate_image(chat: Chat):
     text = Client.create_completion("gpt4", f"Agar matin rus yoki uzbek tilida bo'lsa aniq va tiniq ingiliz tiliga tarjima qil, agar ingiliz tilida bo'lsa ozgarishsiz matini qaytar! mati: {chat.message}")
     resp = Client.create_generation("prodia", text)
     now = datetime.now()
-    pwd = subprocess.check_output(["pwd"], text=True).strip()
-    path = f"{pwd}/images/{hashlib.sha256(str(now.microsecond).encode()).hexdigest()}.png"
+    # pwd = subprocess.check_output(["pwd"], text=True).strip()
+    path = f"/images/{hashlib.sha256(str(now.microsecond).encode()).hexdigest()}.png"
     with open(path, "wb") as f:
         f.write(resp)
     return path
